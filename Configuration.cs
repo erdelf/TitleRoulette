@@ -11,6 +11,9 @@ namespace TitleRoulette
 
         #region Saved configuration values
         public Dictionary<ulong, List<TitleGroup>> TitleGroups { get; set; } = new();
+
+        public bool       assignRandomTitleOnAreaChange { get; set; }
+        public TitleGroup randomTitleGroup              { get; set; }
         #endregion
 
         public List<TitleGroup> GetCurrentCharacterGroups()

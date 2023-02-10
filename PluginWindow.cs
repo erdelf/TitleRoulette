@@ -147,7 +147,8 @@ namespace TitleRoulette
 
         public class TitleSelection
         {
-            private int currentGroup = 0;
+            private int currentGroup          = 0;
+            private int currentGroupForRandom = 0;
 
             public required List<Configuration.TitleGroup> Groups { get; set; }
             public required List<Title> SortedTitles { get; set; }
@@ -255,6 +256,28 @@ namespace TitleRoulette
                 ImGui.EndDisabled();
                 if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled) && !ImGui.GetIO().KeyCtrl)
                     ImGui.SetTooltip("Hold CTRL to discard any changes you've made since you've last saved.");
+                ImGui.SameLine();
+                bool randomAssign = Service.Configuration.assignRandomTitleOnAreaChange;
+                ImGui.Checkbox("Random title when switching Zones", ref randomAssign);
+                Service.Configuration.assignRandomTitleOnAreaChange = randomAssign;
+
+                if (randomAssign)
+                {
+                    ImGui.SameLine();
+                    ImGui.SetNextItemWidth(200);
+                    if (ImGui.BeginCombo("###GroupComboRandom", $"{Groups[currentGroupForRandom].Name} ({FormatTitleCount(Groups[currentGroupForRandom])})"))
+                    {
+                        for (int i = 0; i < Groups.Count; ++i)
+                        {
+                            if (ImGui.Selectable($"{Groups[i].Name} ({FormatTitleCount(Groups[i])})", i == currentGroupForRandom))
+                            {
+                                currentGroupForRandom                  = i;
+                                Service.Configuration.randomTitleGroup = Groups[currentGroupForRandom];
+                            }
+                        }
+                        ImGui.EndCombo();
+                    }
+                }
 
                 if (save)
                 {

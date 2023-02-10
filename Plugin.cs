@@ -23,8 +23,9 @@ namespace TitleRoulette
             }
 
             Service.PluginInterface.UiBuilder.OpenConfigUi += OpenConfigWindow;
-            Service.PluginInterface.UiBuilder.Draw += Service.WindowSystem.Draw;
-            Service.PluginCommandManager = new PluginCommandManager<Plugin>(this, Service.CommandManager);
+            Service.PluginInterface.UiBuilder.Draw         += Service.WindowSystem.Draw;
+            Service.PluginCommandManager                   =  new PluginCommandManager<Plugin>(this, Service.CommandManager);
+            Service.ClientState.TerritoryChanged           += (_, _) => RandomTitleEvent();
         }
 
         private void InitializeTitles()
@@ -37,6 +38,11 @@ namespace TitleRoulette
                 Service.Titles.Add(new Title { Id = (ushort)title.RowId, MasculineName = title.Masculine, FeminineName = title.Feminine, IsPrefix = title.IsPrefix });
             }
             Service.MaxTitleId = Service.Titles.Max(x => x.Id);
+        }
+
+        private void RandomTitleEvent()
+        {
+            SetRandomTitleFromGroup(Service.Configuration.randomTitleGroup);
         }
 
         [Command("/ptitle")]
@@ -53,11 +59,15 @@ namespace TitleRoulette
                 Service.Chat.PrintError($"[Title Roulette] Group '{args}' does not exist.");
                 return;
             }
+            SetRandomTitleFromGroup(group);
+        }
 
+        public void SetRandomTitleFromGroup(Configuration.TitleGroup group)
+        {
             int titleCount = group.Titles.Count;
             if (titleCount == 0)
             {
-                Service.Chat.PrintError($"[Title Roulette] Can't pick a random title from group '{args}' as it is empty.");
+                Service.Chat.PrintError($"[Title Roulette] Can't pick a random title from group '{group.Name}' as it is empty.");
                 return;
             }
 
