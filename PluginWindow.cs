@@ -11,6 +11,8 @@ using Dalamud.Interface.Components;
 
 namespace TitleRoulette
 {
+    using Dalamud.Interface.Utility;
+
     public partial class PluginWindow : Window
     {
         private ConfigState configState = new ConfigState(0);

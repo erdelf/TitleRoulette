@@ -25,7 +25,7 @@ namespace TitleRoulette
             Service.PluginInterface.UiBuilder.OpenConfigUi += OpenConfigWindow;
             Service.PluginInterface.UiBuilder.Draw         += Service.WindowSystem.Draw;
             Service.PluginCommandManager                   =  new PluginCommandManager<Plugin>(this, Service.CommandManager);
-            Service.ClientState.TerritoryChanged           += (_, _) => RandomTitleEvent();
+            Service.ClientState.TerritoryChanged           += _ => RandomTitleEvent();
         }
 
         private void InitializeTitles()

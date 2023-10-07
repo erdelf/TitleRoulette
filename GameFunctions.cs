@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace TitleRoulette
 {
+    using System.Reflection.Emit;
+
     internal class GameFunctions
     {
 #pragma warning disable CS0649
@@ -20,10 +22,8 @@ namespace TitleRoulette
 
         public GameFunctions()
         {
-            SignatureHelper.Initialise(this);
+            Service.GameInteropProvider.InitializeFromAttributes(this);
         }
-
-        public byte ClearTitle() => executeCommand.Invoke(303, 0, 0, 0, 0);
 
         public byte SetTitle(ushort titleId) => executeCommand.Invoke(302, titleId, 0, 0, 0);
 
